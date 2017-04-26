@@ -25,48 +25,9 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
   try
   {
-
-    src = cv_bridge::toCvShare(msg, "bgr8")->image;
-
-    //Convert the image to HSV
-    cv::cvtColor(src, hsv, CV_BGR2HSV);
-
-    //lower and upper thresholds for pixels on the line
-    cv::Scalar lower_thresh(0,0,127);
-    cv::Scalar upper_thresh(255, 255,255);
-
-    //Create a mask with only white pixels
-    cv::inRange(hsv, lower_thresh, upper_thresh, mask);
-
-    //Calculate moments of mask
-    moments = cv::moments(mask, true);
-
-    //Compute Center of Mass
-    center_of_mass.x = moments.m10 / moments.m00;
-    center_of_mass.y = moments.m01 / moments.m00;
-
-    // send a special error if the mass is below a threshold:
-    if(moments.m00 > 6000){
-        //Calculate Noramlized Error
-        error_msg.data = center_of_mass.x - src.cols/2;
-    }else{
-        // special error message
-        error_msg.data = 12345;
-    }
-    line_error_pub.publish(error_msg);
-
-    //Conert the image back to BGR
-    cv::cvtColor(mask, dst, CV_GRAY2BGR);
-
-    //Plot the center of mass
-    cv::circle(dst, center_of_mass, 5, cv::Scalar(0,0,255), -1);
-
-    sensor_msgs::ImagePtr msg;
-
-    msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", dst).toImageMsg();
-
-    user_image_pub.publish(msg);
-
+    /*
+     * ADD CODE HERE
+     */
   }
   catch (cv_bridge::Exception& e)
   {

@@ -32,29 +32,23 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
   {
     src = cv_bridge::toCvShare(msg, "bgr8")->image;
 
-    //Convert the image to HSV
-    cv::cvtColor(src, hsv, CV_BGR2HSV);
+	cv::cvtColor(src, hsv, CV_BGR2HSV);
 
-    //Define the range of blue pixels
-    cv::Scalar lower_thresh(hue_lower, sat_lower, value_lower);
-    cv::Scalar upper_thresh(hue_upper, sat_upper, value_upper);
-
-    //Create a mask with only blue pixels
-    cv::inRange(hsv, lower_thresh, upper_thresh, mask);
-
-    //Calculate moments of mask
-    moments = cv::moments(mask, true);
-
-    //Calculate center of mass using moments
-    center_of_mass.x = moments.m10 / moments.m00;
-    center_of_mass.y = moments.m01 / moments.m00;
-
-    //Conert the image back to BGR
-    cv::cvtColor(mask, dst, CV_GRAY2BGR);
-
-    //Plot the center of mass
-    cv::circle(dst, center_of_mass, 5, cv::Scalar(0,0,255), -1);
-
+	cv::Scalar lower_thresh(hue_lower, sat_lower, value_lower);
+	cv::Scalar upper_thresh(hue_upper, sat_upper, value_upper);
+	
+	cv::inRange(hsv, lower_thresh, upper_thresh, mask);
+	
+	moments = cv::moments(mask, true);
+	center_of_mass.x = moments.m10 / moments.m00;
+	center_of_mass.y = moments.m01 / moments.m00;
+	
+	ROS_INFO("Center of Mass: %i - %i", center_of_mass.x, center_of_mass.y);
+	
+	cv::cvtColor(mask, dst, CV_GRAY2BGR);
+	
+	cv::circle(dst, center_of_mass, 5, cv::Scalar(0,0,255), -1);
+	
     sensor_msgs::ImagePtr msg;
     msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", dst).toImageMsg();
 
@@ -88,11 +82,11 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
 
   ros::NodeHandle nh_("~");
-  nh_.param<int>("hue_lower", hue_lower, 80);
-  nh_.param<int>("hue_upper", hue_upper, 150);
-  nh_.param<int>("sat_lower", sat_lower, 20);
+  nh_.param<int>("hue_lower", hue_lower, 7);
+  nh_.param<int>("hue_upper", hue_upper, 23);
+  nh_.param<int>("sat_lower", sat_lower, 99);
   nh_.param<int>("sat_upper", sat_upper, 255);
-  nh_.param<int>("value_lower", value_lower, 20);
+  nh_.param<int>("value_lower", value_lower, 172);
   nh_.param<int>("value_upper", value_upper, 255);
 
   image_transport::ImageTransport it(nh);

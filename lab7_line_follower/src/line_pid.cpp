@@ -19,16 +19,13 @@ void errorCallback(const std_msgs::Float32& msg)
 {
     // Stop if the tape is no longer detected
     if(msg.data > 12344 && msg.data < 12346){
-        vel_msg.angular.z = 0;
-        vel_msg.linear.x = 0;
+        /*
+         * ADD CODE HERE
+         */
     }else{
-        cur_error = msg.data;
-
-        integral_error += cur_error;
-        derivative_error = cur_error - prev_error;
-        vel_msg.angular.z = -(Kp * cur_error + Kd * derivative_error + Ki * integral_error);
-        vel_msg.linear.x = 0.7;
-        prev_error = cur_error;
+        /*
+         * ADD CODE HERE
+         */
     }
 
     vel_pub.publish(vel_msg);
@@ -53,9 +50,9 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "line_pid");
   ros::NodeHandle nh;
 
-  nh.param<double>("Kp", Kp, 0.01);
+  nh.param<double>("Kp", Kp, 0.0);
   nh.param<double>("Ki", Ki, 0.0);
-  nh.param<double>("Kd", Kd, 0.03);
+  nh.param<double>("Kd", Kd, 0.0);
 
   dynamic_reconfigure::Server<lab7_line_follower::PidConfig> config_server;
   dynamic_reconfigure::Server<lab7_line_follower::PidConfig>::CallbackType f;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(lab8_line_follower)
+project(lab7_line_follower)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -16,12 +16,12 @@ generate_dynamic_reconfigure_options(
 )
 
 catkin_package(
-  INCLUDE_DIRS include
+  INCLUDE_DIRS cfg
   CATKIN_DEPENDS roscpp rospy std_msgs cv_bridge image_transport dynamic_reconfigure
 )
 
 include_directories(
-  include
+  #include
   ${catkin_INCLUDE_DIRS}
   ${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake
   ${OpenCV_INCLUDE_DIRS}
@@ -34,4 +34,3 @@ target_link_libraries(line_pid ${catkin_LIBRARIES})
 add_executable(line_detector src/line_detector.cpp)
 target_link_libraries(line_detector ${catkin_LIBRARIES})
 target_link_libraries(line_detector ${OpenCV_LIBRARIES})
-

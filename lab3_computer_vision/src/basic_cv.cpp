@@ -22,15 +22,12 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
     src = cv_bridge::toCvShare(msg, "bgr8")->image;
 
     cvtColor(src, gray, CV_BGR2GRAY);
-
-    blur( gray, dst, Size(3,3) );
-
+    blur(gray, dst, Size(3,3) );
     Canny(dst, edges, 50, 200, 3);
-
-    cvtColor(edges, cdst, CV_GRAY2BGR);
-
-    HoughLinesP(edges, lines, 1, CV_PI/180, 80, 30, 10 );
-    for( size_t i = 0; i < lines.size(); i++ )
+	cvtColor(edges, cdst, CV_GRAY2BGR);
+	HoughLinesP(edges, lines, 1, CV_PI/180, 80, 30, 10);
+	
+	for( size_t i = 0; i < lines.size(); i++ )
     {
         line( cdst, Point(lines[i][0], lines[i][1]),
             Point(lines[i][2], lines[i][3]), Scalar(0,0,255), 3, 8 );
